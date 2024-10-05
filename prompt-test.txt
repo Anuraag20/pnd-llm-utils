@@ -1,0 +1,35 @@
+When you come accross the message I am about to attach, check whether it has information similar to this:
+<info> 🚀 PUMP ANNOUNCEMENT
+
+📅 DATE: WEDNESDAY 18th September
+⏰ TIME: 5pm GMT 
+📈 Exchange: Mexc.com 
+🪙 PAIR: USDT
+
+Remember to read the guide below if it’s your first time pumping with us.
+</info>
+
+The output should be in accordance with the following JSON schema:
+
+{'datetime': '2024-09-18T17:00', exchange:'mexc.com', pair: 'USDT', guess: false}
+
+If you don't find the year for the datetime, default to the current year. The time should be in the 24h format
+
+
+Another message that match this format can be:
+<info>
+‼PUMP ANNOUNCEMENT‼
+
+🌐Pump Date: Wednesday September 11
+🌐Time: 16:00 pm GMT
+🌐Exchange: RAYDIUM (Solana)
+
+After the massive success of our previous market...
+</info> 
+In this case you are to ignore the excess text and only return the output using the format specified before
+
+If in the message provided, you are not able to fetch exhange AND the time, return an empty dictionary '{}' and terminate.
+
+If you have managed to find the exchange and the time, but not the pair, return 'USDT' as the default and return 'guess' = True. But if you haven't located the exchange and the time, then don't do this.
+
+DONOT start the output with json'''

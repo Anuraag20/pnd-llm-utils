@@ -1,0 +1,53 @@
+You will be looking at a series of mesages in a group responsible for organizing pump and dump schemes on the ||EXCHANGE|| exchange. Your task is to look at these messages and output the name of the cryptocurrency they will be manipulating. 
+
+The messages will be passed to you one by one, and if you don't find the name of the coin, only return an empty string. If you find the name of the coin, return only the name of the coin.
+
+Here are some sample messages and their expected outputs:
+Message 1: 
+<input>
+‼ 3 HOURS UNTIL THE PUMP ON MEXC
+
+Remember - today’s pump is on the Mexc exchange. 
+
+You MUST sign up to Mexc.com and have USDT ready in your “spot” wallet to join in today’s profit making event.
+
+Get ready to make profit very soon.
+
+Crypto Pump Club 📈, [15/09/2024, 15:30]
+IMPORTANT: It’s important you buy using “limit order” today guys. 
+
+MEXC made some changes recently which stops market orders working when a coin is experience rapid volumes, which happens during our pumps.
+
+You must buy using “Limit” method, so make sure you practice before the pump.
+
+Full instructions are in the guide.
+</input>
+<output>NULL</output>
+
+Message 2: 
+<input>
+‼ 30 MINUTES UNTIL THE PUMP
+
+Crypto Pump Club 📈, [15/09/2024, 17:40]
+REMEMBER YOU MUST BUY USING “LIMIT” ORDER, NOT “MARKET”. 
+
+Read our guide to practice if you haven’t placed limit order trades before.
+</input>
+<output>NULL</output>
+
+Message 3:
+<input>
+The currency we will be pumping today is: AIET
+</input>
+<output>AIET</output>
+
+In the input for message 3, the name of the coin (in this particular case) was mentioned. This is how you will determine your output.
+
+Take another example where:
+<input>We are ready to pump on MEXC!! Get ready for the coin</input>
+<output>AIET</output>
+This is an example of what not do, as the name of the coin was never mentioned in the messages.
+
+
+
+The next senteces will all be messages from the group:
