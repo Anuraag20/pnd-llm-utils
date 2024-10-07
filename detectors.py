@@ -1,11 +1,37 @@
 
 import configparser
 
-import google.generativeai as genai
+class PumpDetector:
+   
+    def __init__(self, coin_prompt = None, schedule_prompt = None):
 
-class PumpDetectorInterface:
-    
-    
+
+        self.coin_prompt = coin_prompt
+        self.schedule_prompt = schedule_prompt
+        self.model = None
+        
+    @classmethod
+    def _read_text_from_file(cls, path):
+        
+        if path:
+            with open(path, 'r') as f:
+                text = ''.join(f.readlines())
+            return text
+
+        return None
+
+    @classmethod
+    def from_prompt_path(cls, schedule_prompt_path = '', coin_prompt_path = '', **kwargs):
+
+        schedule_prompt = cls._read_text_from_file(schedule_prompt_path)
+        coin_prompt = cls._read_text_from_file(coin_prompt_path)
+        
+        return cls(
+                coin_prompt = coin_prompt,
+                schedule_prompt = schedule_prompt,
+                **kwargs 
+                )
+
     def _prompt_model(self, prompt, data = []):
         """
         Call the model's API with the user prompt and the data 
@@ -23,9 +49,10 @@ class PumpDetectorInterface:
         """
         raise NotImplementedError(f"The function '_prompt_model' needs to be implemented by {self.__class__.__name__}")
 
+
     def _assert_has_attr(self, attr:str):
         
-        assert hasattr(self, attr) and getattr(self, attr), f"'{self.__class__.__name__}' does not have the attribute '{attr}'"
+        assert getattr(self, attr), f"'{self.__class__.__name__}' does not have the attribute '{attr}'"
     
     def get_info(self, message):
         """
@@ -69,14 +96,17 @@ class PumpDetectorInterface:
 
 
 
-class GeminiDetector(PumpDetectorInterface):
+class GeminiDetector(PumpDetector):
 
     def __init__(self, api_key, schedule_prompt = None, coin_prompt = None):
-
+        
+        super().__init__(coin_prompt = coin_prompt, schedule_prompt = schedule_prompt)
+        
+        # Import here so it is not necessary to have this package istalled in case any other detector is used
+        import google.generativeai as genai
         genai.configure(api_key = api_key)
         self.model = genai.GenerativeModel("gemini-1.5-flash")
-        self.schedule_prompt = schedule_prompt
-        self.coin_prompt = coin_prompt
+
 
     def _prompt_model(self, prompt, data = []):
 
@@ -87,11 +117,6 @@ class GeminiDetector(PumpDetectorInterface):
 
 
 
-def read_text_from_file(path):
-
-    with open(path, 'r') as f:
-        text = ''.join(f.readlines())
-    return text
 
 
 if __name__ == '__main__':
@@ -99,17 +124,14 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read('config.ini')
 
-    schedule_prompt = read_text_from_file('prompts/prompt-test.txt')
-    coin_prompt = read_text_from_file('prompts/coin-prompt.txt')
-    schedule_message = read_text_from_file('test-messages/schedule.txt')
 
-    detector  = GeminiDetector(
+    detector  = GeminiDetector.from_prompt_path(
             api_key = config['gemini-flash']['API_KEY'],
-            schedule_prompt = schedule_prompt,
-            coin_prompt = coin_prompt
+            schedule_prompt_path = 'prompts/prompt-test.txt',
+            coin_prompt_path = 'prompts/coin-prompt.txt'
         )
-    print(detector.get_info(schedule_message))
-
+    print(detector.get_info(GeminiDetector._read_text_from_file('test-messages/schedule.txt')))
+    
     # Do this for the coin detection model
     # prompt = prompt.replace('||EXCHANGE||', exchange)
 
