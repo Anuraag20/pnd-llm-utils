@@ -9,14 +9,14 @@ class PumpDetector:
         self.model = None
         
     @classmethod
-    def _read_text_from_file(cls, path):
+    def _read_text_from_file(cls, path) -> str:
         
         if path:
             with open(path, 'r') as f:
                 text = ''.join(f.readlines())
             return text
 
-        return None
+        return ''
 
     @classmethod
     def from_prompt_path(cls, path = '', exchange = None, **kwargs):
@@ -47,7 +47,8 @@ class PumpDetector:
         ----------
         str: The model's response
         """
-        raise NotImplementedError(f"The function '_prompt_model' needs to be implemented by {self.__class__.__name__}")
+        raise NotImplementedError(f"The function '__prompt_model' needs to be implemented by {self.__class__.__name__}")
+
     
 
 
@@ -85,7 +86,7 @@ if __name__ == '__main__':
 
     detector  = GeminiDetector.from_prompt_path(
             api_key = config['gemini-flash']['API_KEY'],
-            path = 'prompts/coin-prompt.txt',
+            path = 'prompts/prompt-test.txt',
         )
     
     messages = []
@@ -93,7 +94,7 @@ if __name__ == '__main__':
 
         message = input('Enter message: ')
         messages.append(message)
-        print(detector.prompt(messages))
+        print(detector.prompt([message]))
     
     # Do this for the coin detection model
 
