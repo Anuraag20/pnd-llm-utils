@@ -1,5 +1,9 @@
 
 import configparser
+import typing_extensions as typing
+import datetime as datetime
+
+
 
 class PumpDetector:
    
@@ -52,9 +56,11 @@ class PumpDetector:
     
 
 
+
+
 class GeminiDetector(PumpDetector):
 
-    def __init__(self, api_key, system_prompt = None):
+    def __init__(self, api_key, system_prompt = None, response_schema: typing.TypedDict = None):
         
         super().__init__(system_prompt = system_prompt)
         
@@ -63,7 +69,10 @@ class GeminiDetector(PumpDetector):
         genai.configure(api_key = api_key)
         self.model = genai.GenerativeModel(
                 model_name = "gemini-1.5-flash",
-                system_instruction = self.system_prompt 
+                system_instruction = self.system_prompt,
+                generation_config = genai.GenerationConfig(
+                        response_mime_type = "application/json", response_schema = response_schema
+                    )
                 )
 
 
